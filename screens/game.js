@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 
 import Card from './../components/card';
-import Input from './../components/input';
 import Color from './../constants/colors';
-import Summary from '../components/summary';
 import NumberContainer from '../components/number';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // this will generate the values betwen min and max excluding
 // current value.
@@ -28,7 +28,6 @@ const Game = props => {
 
   useEffect(() => {
     if (currVal === props.target) {
-      console.log('Total Steps: ', {steps});
       props.onfinnish(steps);
     }
   }, [currVal, props.targetValue, props.onfinnish]);
@@ -36,7 +35,7 @@ const Game = props => {
   // we pass the previous value. so that new 
   // random number should be < current and > min
   const guessLower = () => {
-    if (currVal < props.target ) {
+    if (currVal < props.target) {
       Alert.alert("Don't Lie!!!", "You are trying to cheat wrt the direction of the target values.", [{ title: 'Sorry', style: 'cancel' }]);
       return;
     }
@@ -44,7 +43,6 @@ const Game = props => {
     let val = generateGuess(currentLow.current, currentHigh.current, currVal);
     setCurrVal(val);
     setSteps(steps => steps + 1);
-    console.log('Steps: ', {steps});
   }
 
   // we pass the previous value. so that new 
@@ -54,22 +52,27 @@ const Game = props => {
       Alert.alert("Don't Lie!!!", "You are trying to cheat wrt the direction of the target values.", [{ title: 'Sorry', style: 'cancel' }]);
       return;
     }
-    console.log('Current Value: ', currVal);
     currentLow.current = currVal;
     let val = generateGuess(currentLow.current, currentHigh.current, currVal);
     setCurrVal(val);
-    setSteps(steps + 1);
-    console.log('Steps: ', {steps});
+    setSteps(steps => steps + 1);
   }
+
+  const IconGreater = <Icon name="angle-right" size={30} color="red" onPress={guessHigher} />;
+  const IconSmaller = <Icon name="angle-left" size={30} color="blue" onPress={guessLower} />;
 
   return (
     <Card style={{ margin: 40, height: 300, width: 300 }}>
       <View style={styles.gameContainer}>
         <Text style={styles.title}>Mobile's Guess</Text>
         <NumberContainer style={{ width: 50, height: 50 }} finalVal={currVal} />
-        <View style={styles.buttonContainer}>
-          <Button title='lower' color='blue' onPress={guessLower} />
-          <Button title='higher' color='red' onPress={guessHigher} />
+        <View flexDirection="row" justifyContent="space-even">
+          <View style={styles.buttonContainer}>
+            {IconSmaller}{IconSmaller}
+          </View>
+          <View style={styles.buttonContainer}>
+            {IconGreater}{IconGreater}
+          </View>
         </View>
       </View>
     </Card>
@@ -93,6 +96,7 @@ const styles = StyleSheet.create({
     margin: 20
   },
   buttonContainer: {
+    margin: 10,
     marginVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -6,11 +6,10 @@ import StartGame from './screens/startgame';
 import Game from './screens/game';
 import EndGame from './screens/endgame';
 
-
 export default function App() {
   const [targetValue, setTargetValue] = useState();
   const [gameScreen, setGameScreen] = useState(false);
-  const [steps, setSteps] = useState(0);
+  const [steps, setSteps] = useState();
 
   const startGameScreenHandler = (val) => {
     setGameScreen(true);
@@ -19,7 +18,7 @@ export default function App() {
   }
 
   const setStepsHandler = val => {
-    console.log('Total Steps Taken: ', val);
+    //console.log('Total Steps Taken: ', val);
     setSteps(val);
     setGameScreen(false);
   }
